@@ -21,10 +21,10 @@ public class Todo {
     public static void del(int del){
         if(del>=0&&del<arr.size()){
             arr.remove(del);
+            System.out.println("Task Deleted Successfully.\n");
         }
         else{
             System.out.println("Invalid Index. ");}
-        System.out.println("Task Deleted Successfully.\n");
     }
     public static void main(String[] args) {
         int choice ;
