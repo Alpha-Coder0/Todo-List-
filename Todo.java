@@ -59,7 +59,7 @@ public class Todo {
     }
     public static void main(String[] args) {
         loadTasks();
-        int choice ;
+        int choice = 0 ;
         System.out.println("Welcome At the Todo List App: ");   
         do{
             System.out.println("\nChoose an option:");
@@ -68,8 +68,16 @@ public class Todo {
             System.out.println("3- Delete Task");
             System.out.println("0- Exit");
             System.out.println("------------------------------------\n");
-            choice =input.nextInt();
+            if(input.hasNextInt()){
+                choice = input.nextInt();  
+            }
+            else{
+                System.out.println("Invalid input. Please Enter Numbers Only...");
+                input.nextLine();
+                continue;
+            }
             input.nextLine();
+            
             switch(choice) {
                 case 1:
                     task();
