@@ -2,7 +2,80 @@ package com.mycompany.todo;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.*;
+import javax.swing.*;
+import java.awt.*;
+
 public class Todo {
+    //Gui
+    public static DefaultListModel<String> listModel = new DefaultListModel<>();
+    public static JList<String> taskList = new JList<>(listModel);
+    public static JTextField inputField = new JTextField(20);
+    public static void createGUI() {
+//------------------------------------------------------------------------------
+    JFrame frame = new JFrame("Todo App");
+    frame.setSize(400, 500);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setLayout(new BorderLayout());  // Make The app have sections
+//------------------------------------------------------------------------------
+    // Top (input + add button)
+    JPanel topPanel = new JPanel();
+    JButton addButton = new JButton("Add Task");
+    //Intput's (Button & Field).
+    topPanel.add(inputField);
+    topPanel.add(addButton);
+//------------------------------------------------------------------------------
+    // Center (task list)
+    refreshList();
+    JScrollPane scrollPane = new JScrollPane(taskList);
+//------------------------------------------------------------------------------
+    // Bottom (delete button)
+    JButton deleteButton = new JButton("Delete Selected");
+//------------------------------------------------------------------------------
+    // Set the location of Every Section.
+    frame.add(topPanel, BorderLayout.NORTH);
+    frame.add(scrollPane, BorderLayout.CENTER);
+    frame.add(deleteButton, BorderLayout.SOUTH);
+//------------------------------------------------------------------------------
+    // 🔥 Actions
+    addButton.addActionListener(e -> {
+        String text = inputField.getText().trim();
+
+        if (!text.isEmpty()) {
+            arr.add(text);
+            saveTasks();
+            refreshList();
+            inputField.setText("");
+        }
+    });
+    deleteButton.addActionListener(e -> {
+        int index = taskList.getSelectedIndex();
+
+        if (index != -1) {
+            int confirm = JOptionPane.showConfirmDialog(
+                    frame, 
+                    "Are You Sure you want to delete this Task?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION
+                    );
+            if (confirm == JOptionPane.YES_OPTION){
+                arr.remove(index);
+                saveTasks();
+                refreshList();
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "Select a task first.");
+        }
+    });
+    frame.setVisible(true);
+}
+public static void refreshList() {
+    listModel.clear();
+    for (String task : arr) {
+        listModel.addElement(task);
+    }
+}
+
+//End of GUI--------------------------------------------------------------------
     //Buffer writer to write the file in the System and save it. 
     public static void saveTasks(){
         try{
@@ -59,6 +132,7 @@ public class Todo {
     }
     public static void main(String[] args) {
         loadTasks();
+        createGUI();
         int choice = 0 ;
         System.out.println("Welcome At the Todo List App: ");   
         do{
